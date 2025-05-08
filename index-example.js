@@ -1,8 +1,19 @@
 const puppeteer = require('puppeteer');
 const say = require('say');
+require('dotenv').config(); // 👈 Carga variables del archivo .env
 
-const contactName = process.env.NUMBER_NAME_WHATSAPP; // Nombre del contacto o grupo de WhatsApp
-const nombreVisible = process.env.NAME_VOICE; // Nombre que se leerá en voz alta
+// Cargar variables de entorno
+const contactName = process.env.NUMBER_NAME_WHATSAPP;
+const nombreVisible = process.env.NAME_VOICE;
+
+// Validación básica
+if (!contactName || !nombreVisible) {
+  console.error('❌ Las variables de entorno no están definidas correctamente.');
+  console.error('NUMBER_NAME_WHATSAPP:', contactName);
+  console.error('NAME_VOICE:', nombreVisible);
+  process.exit(1);
+}
+
 let ultimoLeido = '';
 
 (async () => {
@@ -22,13 +33,17 @@ let ultimoLeido = '';
   await page.waitForSelector(searchBoxSelector, { timeout: 30000 });
   await page.click(searchBoxSelector);
 
+  // Limpiar campo de búsqueda
   await page.keyboard.down('Control');
   await page.keyboard.press('A');
   await page.keyboard.up('Control');
   await page.keyboard.press('Backspace');
-  await page.keyboard.type(contactName);
+
+  // Asegurarse de que contactName es string y escribirlo
+  await page.keyboard.type(String(contactName));
   await page.waitForTimeout(1500);
 
+  // Buscar y abrir el chat
   const chatSelector = `span[title="${contactName}"]`;
   await page.waitForSelector(chatSelector, { timeout: 10000 });
   await page.click(chatSelector);
@@ -36,6 +51,7 @@ let ultimoLeido = '';
 
   console.log(`🎧 Escuchando mensajes nuevos de ${nombreVisible}...`);
 
+  // Bucle de escucha de mensajes
   while (true) {
     try {
       const mensajes = await page.$$eval(
@@ -61,5 +77,5 @@ let ultimoLeido = '';
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
-  // await browser.close();
+  // await browser.close(); // Opcional si lo quieres cerrar manualmente
 })();

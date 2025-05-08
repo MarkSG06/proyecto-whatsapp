@@ -4,11 +4,11 @@
     "description": "Lee en voz los mensajes de WhatsApp Web",
     "main": "index.js",
     "scripts": {
-      "start": "node index.js"
+        "start": "node index.js"
     },
     "dependencies": {
-      "puppeteer": "^21.3.8",
-      "say": "^0.16.0"
+        "dotenv": "^16.5.0",
+        "puppeteer": "^21.3.8",
+        "say": "^0.16.0"
     }
-  }
-  
+}
