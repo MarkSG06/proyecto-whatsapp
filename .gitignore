@@ -1,5 +1,4 @@
 .env
 /node_modules/
 user_data/
-index.js
 package-lock.json

@@ -77,5 +77,4 @@ let ultimoLeido = '';
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
-  // await browser.close(); // Opcional si lo quieres cerrar manualmente
 })();
